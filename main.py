@@ -26,20 +26,11 @@ def check_resources(ordered_ingredients):
     :return: Boolean
     """
 
-    # Extract resources and assign to zero if not available
-    ordered_water = ordered_ingredients.get('water', 0)
-    ordered_milk = ordered_ingredients.get('milk', 0)
-    ordered_coffee = ordered_ingredients.get('coffee', 0)
-
-    # Check if resources are sufficient
-    if ordered_water > resources["water"]:
-        return False, "water"
-    elif ordered_milk > resources['milk']:
-        return False, "milk"
-    elif ordered_coffee > resources['coffee']:
-        return False, "coffee"
-    else:
-        return True, ''
+    for ingredient in ordered_ingredients:
+        if ordered_ingredients[ingredient] > resources[ingredient]:
+            return False, ingredient
+        else:
+            return True, ''
 
 
 def calculate_coins():
@@ -76,9 +67,9 @@ def update_resources(ingredients):
     :param ingredients: dictionary - chosen coffee ingredients
     :return: None
     """
-    resources['water'] -= ingredients.get('water', 0)
-    resources['milk'] -= ingredients.get('milk', 0)
-    resources['coffee'] -= ingredients.get('coffee', 0)
+
+    for ingredient in ingredients:
+        resources[ingredient] -= ingredients[ingredient]
 
 
 while True:
