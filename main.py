@@ -13,9 +13,10 @@ def print_report():
     """
 
     # Print report
-    print(f"Water: {resources['water']}ml")
-    print(f"Milk: {resources['milk']}ml")
-    print(f"Coffee: {resources['coffee']}g")
+    for ingredient in resources:
+        unit = "g" if ingredient == "coffee" else "ml"
+        print(f"{ingredient}: {resources[ingredient]}{unit}")
+
     print(f"Money: ${till_amount}")
 
 
@@ -39,15 +40,20 @@ def calculate_coins():
     :return: int - total amount
     """
 
+    total = 0
+    coins = {
+        "quarters": 0.25,
+        "dimes": 0.10,
+        "nickel": 0.05,
+        "pennies": 0.01
+    }
+
     print("Please insert coins.")
 
-    how_many = "How many"
-    quarters = int(input(f"{how_many} quarters?: "))
-    dimes = int(input(f"{how_many} dimes?: "))
-    nickels = int(input(f"{how_many} nickels?: "))
-    pennies = int(input(f"{how_many} pennies?: "))
+    for coin in coins:
+        total += int(input(f"How many {coin}?: ")) * coins[coin]
 
-    return quarters * 0.25 + dimes * 0.10 + nickels * 0.05 + pennies * 0.01
+    return total
 
 
 def calculate_change(paid, price):
@@ -58,7 +64,7 @@ def calculate_change(paid, price):
     :return: int - transaction change
     """
 
-    return paid - price
+    return round(paid - price, 2)
 
 
 def update_resources(ingredients):
@@ -102,7 +108,10 @@ while True:
             print(f"Here is your {coffee_option} ☕ Enjoy!")
 
             # Update resources
-            update_resources(MENU[user_option]['ingredients'])
+            reduced_ingredients = MENU[user_option]['ingredients']
+            update_resources(reduced_ingredients)
+
+            # Add cash to amount
             till_amount += amount
         elif is_resources_available and not is_amount_enough:
             print("Sorry that's not enough money. Money refunded.")
